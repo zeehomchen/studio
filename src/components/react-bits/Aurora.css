@@ -1,0 +1,13 @@
+.aurora-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.aurora-container canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
