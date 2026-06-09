@@ -19,7 +19,7 @@ export async function GET(
   const { id } = await params
   const order = await prisma.order.findUnique({
     where: { id },
-    include: { work: { select: { id: true, title: true, fileName: true } } },
+    include: { work: { select: { id: true, title: true } } },
   })
   if (!order) {
     return NextResponse.json({ error: "订单不存在" }, { status: 404 })
