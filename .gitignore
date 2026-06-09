@@ -43,8 +43,12 @@ next-env.d.ts
 
 /src/generated/prisma
 
-# uploaded media files (dev only, production uses R2)
+# uploaded media files (dev only, production uses Vercel Blob)
 /public/uploads
+
+# local SQLite database (dev only, production uses MySQL)
+prisma/dev.db
+prisma/dev.db-journal
 
 # private files (source files for download)
 /private-files
