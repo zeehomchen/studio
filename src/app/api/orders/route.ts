@@ -19,7 +19,7 @@ function generateOrderNo(): string {
 /** POST: 创建订单。支持免费直接完成、付费新购、付费升级（versionId + upgradeAmount）。 */
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { workId, buyerEmail, buyerName, buyerLocale, versionId, upgradeFromId, upgradeAmount } = body
+  const { workId, buyerEmail, buyerName, buyerLocale, versionId, upgradeAmount } = body
   const locale = isLocale(buyerLocale) ? buyerLocale : DEFAULT_LOCALE
 
   if (!workId || typeof workId !== "string") {
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   let amount: number
   if (work.isFree) {
     amount = 0
-  } else if (upgradeAmount != null && upgradeFromId) {
+  } else if (upgradeAmount != null) {
     // 升级订单：使用前端传来的差价（已由 check API 计算）
     amount = Math.max(0, Number(upgradeAmount))
   } else {
@@ -83,8 +83,7 @@ export async function POST(request: NextRequest) {
         orderNo,
         workId,
         versionId: targetVersionId,
-        upgradeFromId: upgradeFromId || null,
-        amount,
+                amount,
         status: "PAID",
         buyerEmail: buyerEmail.trim().toLowerCase(),
         buyerName: buyerName?.trim() || null,
@@ -125,8 +124,7 @@ export async function POST(request: NextRequest) {
       orderNo,
       workId,
       versionId: targetVersionId,
-      upgradeFromId: upgradeFromId || null,
-      amount,
+            amount,
       status: "PENDING",
       buyerEmail: buyerEmail.trim().toLowerCase(),
       buyerName: buyerName?.trim() || null,
