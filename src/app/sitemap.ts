@@ -8,11 +8,16 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_DOMAIN
 const STATIC_PATHS = ["", "/about", "/blog", "/works/design", "/works/development", "/tutorials"]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [posts, works, tutorials] = await Promise.all([
-    prisma.post.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
-    prisma.work.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
-    prisma.videoTutorial.findMany({ select: { slug: true, updatedAt: true } }),
-  ])
+  let posts: { slug: string; updatedAt: Date }[] = []
+  let works: { slug: string; updatedAt: Date }[] = []
+  let tutorials: { slug: string; updatedAt: Date }[] = []
+  try {
+    ;[posts, works, tutorials] = await Promise.all([
+      prisma.post.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
+      prisma.work.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
+      prisma.videoTutorial.findMany({ select: { slug: true, updatedAt: true } }),
+    ])
+  } catch { /* DB not available at build time, return static-only sitemap */ }
 
   const items: MetadataRoute.Sitemap = []
 
